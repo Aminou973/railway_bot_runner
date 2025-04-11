@@ -1,14 +1,13 @@
 import discord
 import os
 from discord.ext import commands
-from discord_config import WEBHOOK_URL
+from dotenv import load_dotenv
 from responses import (
     get_start_day_message,
     get_log_trade_message,
     get_rex_daily_message,
     get_rex_weekly_message
 )
-from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_BOT_TOKEN")
@@ -19,18 +18,14 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 @bot.event
 async def on_ready():
     print(f"✅ Bot connecté en tant que {bot.user}")
-    channel_id = 1360251758168903792  # 🧵 command-center
+    channel_id = 1360251758168903792
     channel = bot.get_channel(channel_id)
-
     if channel:
         view = discord.ui.View()
-        # Ligne 1
         view.add_item(discord.ui.Button(label="📋 Start Day", style=discord.ButtonStyle.primary, custom_id="start_day_button"))
         view.add_item(discord.ui.Button(label="🖊️ Log Trade", style=discord.ButtonStyle.secondary, custom_id="log_trade_button"))
-        # Ligne 2
         view.add_item(discord.ui.Button(label="📘 End of Day", style=discord.ButtonStyle.success, custom_id="end_day_button", row=1))
         view.add_item(discord.ui.Button(label="📊 End of Week", style=discord.ButtonStyle.danger, custom_id="end_week_button", row=1))
-
         await channel.send("**Assistant IA Ready** ⚙️\nUtilise les boutons ci-dessous :", view=view)
 
 @bot.event
